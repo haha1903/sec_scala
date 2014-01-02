@@ -6,6 +6,7 @@ trait ObjectIdentity {
 }
 
 object ObjectIdentity {
+  implicit def anyToOi(t: Any) = ObjectIdentity(t.hashCode, t.getClass.getName)
   case class ObjectIdentityImpl(id: Long, type1: String) extends ObjectIdentity {
     override def tpe: String = type1
   }

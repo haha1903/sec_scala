@@ -43,7 +43,7 @@ object BasicLookupStrategy extends LookupStrategy {
     }.filter(_._2 != null).toMap
   }
 
-  def lookupObjectIdentitiy(identity: ObjectIdentity, sids: List[Sid])(implicit ds: DataSource): Acl = {
+  private def lookupObjectIdentitiy(identity: ObjectIdentity, sids: List[Sid])(implicit ds: DataSource): Acl = {
     val sql = selectClause + lookupObjectIdentitiesWhereClause + orderByClause
     Database.forDataSource(ds).withDynSession {
       case class AceRecord(objectIdIdentity: Long, aceOrder: Int, aclId: Long, parentObject: Option[Long], entriesInheriting: Boolean, aceId: Long,
@@ -52,18 +52,17 @@ object BasicLookupStrategy extends LookupStrategy {
       implicit val getAceRecordResult = GetResult(r => AceRecord(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
       val rs = (Q[ObjectIdentity, AceRecord] + sql).list(identity)
       if (!rs.isEmpty) {
-        val acl = new Acl {
-          self =>
+        val acl = new Acl {self =>
           val objectIdentity = ObjectIdentity(rs(0).objectIdIdentity, rs(0).clazz)
           val parentAcl: Acl = null
           val entries = rs.map(r => {
             r.mask match {
               case Some(m) =>
                 new Ace {
-                  val granting: Boolean = r.granting
                   val acl = self
                   val sid = Sid(r.aceSid)
                   override val id = r.aceId
+                  override val granting: Boolean = r.granting
                   val permission: Permission = new Permission {
                     val mask: Int = m
                   }

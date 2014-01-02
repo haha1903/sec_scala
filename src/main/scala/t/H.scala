@@ -16,13 +16,19 @@ object J {
     println(max(1, 2))
   }
 }
-object K extends App {
-  class C1 {
-    def id = 3
-    def id_=(i: Int) {id = i}
+
+object K {
+  case class B[+T](s: String)
+  implicit val a = B[Int]("bbb")
+  def a[A: B](a: A): String = {
+    val ba = implicitly[B[A]]
+    println(ba)
+    "aaa"
   }
-  val c = new C1
-//  println(c.getClass.getDeclaredMethods.map(_.getName).mkString("\n"))
-  println(c.getClass.getDeclaredFields.length)
-  println(c.getClass.getDeclaredFields.map(_.getName).mkString("\n"))
+  println(a(3))
+  def main(args: Array[String]) {
+    val l = List(1, 2, 3)
+    l.map(a =>
+      a.toString)
+  }
 }

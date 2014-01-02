@@ -5,5 +5,5 @@ trait Ace {
   val id: Long = 0
   val permission: Permission
   val sid: Sid
-  val granting: Boolean
+  val granting: Boolean = true
 }
