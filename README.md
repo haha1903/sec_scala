@@ -1,12 +1,14 @@
 # 品专重构
 ## 周期
 - 一个月
+
 ## 提升
 - 重复代码比例
 - 测试覆盖率、分层补充 dao -> service
 - Blocker, Critical 问题排查
 - 降低 Code Complexity
 - 保持自动化测试比例
+
 ## 预期
 - 总代码行数下降
 - 品专 KA 单独部署
